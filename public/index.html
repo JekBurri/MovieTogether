@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Chat</title>
+    <link rel="stylesheet" type="text/css" href="/public/style.css" />
+  </head>
+  <body>
+    <audio id="myaudio" src="funny.mp3"></audio>
+    <script src="events.js" defer></script>
+    <h1>Movie Date With my Cat</h1>
+    <video src="/video" controls></video>
+    <form id="chat-form">
+      <input type="text" id="chat-input" placeholder="Type your message here" autocomplete="off" />
+      <button type="submit" class="chatbutton">Send</button>
+    </form>
+    <ul id="chat-messages"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const video = document.querySelector('video');
+      const socket = io();
+
+     // Play video for all users
+  socket.on('play video', (time) => {
+    video.currentTime = time / 1000;
+    video.play();
+    io.emit('video state', {isPlaying: true, currentTime: time});
+  });
+
+  // Pause video for all users
+  socket.on('pause video', (time) => {
+    video.pause();
+    io.emit('video state', {isPlaying: false, currentTime: time});
+  });
+
+  // Update video state for all users
+  socket.on('video state', (state) => {
+    if (state.isPlaying) {
+      video.currentTime = state.currentTime / 1000;
+      video.play();
+    } else {
+      video.pause();
+    }
+  });
+
+      // Send chat message
+      const chatForm = document.querySelector('#chat-form');
+      const chatInput = document.querySelector('#chat-input');
+      const chatMessages = document.querySelector('#chat-messages');
+
+      chatForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const message = chatInput.value;
+        if (message.trim()) {
+          socket.emit('chat message', message);
+          chatInput.value = '';
+          chatInput.focus();
+        }
+      });
+      
+      // Receive chat message
+      // socket.on('chat message', (message) => {
+      //   const item = document.createElement('li');
+      //   item.textContent = message;
+      //   chatMessages.appendChild(item);
+      // });
+      socket.on('chat message', (message) => {
+        const chatMessages = document.querySelector('#chat-messages');
+        const item = document.createElement('li');
+        item.textContent = USERNAME + " - " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second:"2-digit" }) + " - " + message;
+        chatMessages.insertAdjacentHTML('afterbegin', item.outerHTML);
+      });
+
+      // Scroll to bottom of chat box
+      function scrollChatBoxToBottom() {
+        const chatBox = document.querySelector('#chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      // Send play video request
+      video.addEventListener('play', () => {
+        socket.emit('play video', video.currentTime * 1000);
+      });
+
+      // Send pause video request
+      video.addEventListener('pause', () => {
+        socket.emit('pause video');
+      });
+    </script>
+  </body>
+</html>
