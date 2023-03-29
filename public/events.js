@@ -1,10 +1,10 @@
-document.addEventListener('click', (eve) => {
-    const audio = document.getElementById("myaudio");
+// document.addEventListener('click', (eve) => {
+//     const audio = document.getElementById("myaudio");
     
-    if(eve.target.className.includes('chatbutton')){
-        audio.play();
-    }
-});
+//     if(eve.target.className.includes('chatbutton')){
+//         audio.play();
+//     }
+// });
 
 USERNAME = prompt("Enter username:");
 
