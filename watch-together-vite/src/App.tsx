@@ -5,8 +5,13 @@ import Swal from "sweetalert2";
 
 export const socket = io("http://localhost:3000");
 
+type Message = {
+  message:string,
+  sender:string
+}
+
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [me, setMe] = useState<any>("");
   const [movie, setMovie] = useState<any>({});
   const [myMessage, setMyMessage] = useState({
@@ -52,14 +57,16 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="flex flex-col border border-gray-300 rounded">
+    <div className="flex justify-center w-full h-screen">
+      <div className="flex flex-col border border-gray-300 w-full rounded">
         <div className="bg-blue-600 text-white p-4 rounded-t">
           <p>Watch Together</p>
         </div>
         <div className="flex justify-between p-4 border-b border-gray-300">
           <video
+            // @ts-ignore
             onPlay={handlePlay}
+            // @ts-ignore
             onPause={handlePause}
             controls
             src="http://localhost:3000/video"
@@ -71,6 +78,7 @@ function App() {
                 <div
                   key={index}
                   className={`border border-gray-300 rounded p-2 mb-2 ${
+                    // @ts-ignore
                     message.sender === me ? "self-end bg-green-100" : ""
                   }`}
                 >
