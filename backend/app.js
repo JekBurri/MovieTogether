@@ -10,10 +10,10 @@ const server = http.createServer(app);
 
 const room = {
     players: [
-        { id: 1, name: 'Player 1', score: 0, color: 'red' },
+        // { id: 1, name: 'Player 1', score: 0, color: 'red' },
     ],
     chatMessages: [
-        { id: 1, message: 'Hello', senderId: 1 },
+        // { id: 1, message: 'Hello', senderId: 1 },
     ],
     movie: {
         playing: false,

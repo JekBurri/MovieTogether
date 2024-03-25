@@ -72,57 +72,55 @@ function App() {
             src="http://localhost:3000/video"
             className="w-3/4"
           />
-          <div className="w-1/4 border-l border-gray-300 pl-4">
-            <div className="max-h-80 overflow-y-auto overflow-hidden">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`border border-gray-300 rounded p-2 mb-2 ${
-                    // @ts-ignore
-                    message.sender === me ? "self-end bg-green-100" : ""
-                  }`}
-                >
-                  <p className="font-semibold">
-                    {message.sender === me ? "You" : message.sender}
-                  </p>
-                  <p>{message.message}</p>
-                </div>
-              ))}
-            </div>
+          <div className="w-1/4 border-l border-gray-300 pl-4 flex flex-col h-full">
+  <div className="overflow-y-auto overflow-hidden" style={{ maxHeight: "calc(100% - 3rem)" }}>
+    {messages.map((message, index) => (
+      <div
+        key={index}
+        className={`border border-gray-300 rounded p-2 mb-2 ${
+          message.sender === me ? "self-end bg-green-100" : ""
+        }`}
+      >
+        <p className="font-semibold">
+          {message.sender === me ? "You" : message.sender}
+        </p>
+        <p>{message.message}</p>
+      </div>
+    ))}
+  </div>
 
-            <div className="border-t border-gray-300 mt-4 flex flex-col h-full">
-              {/* Chat input field */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  socket.emit("sendmessage", myMessage);
-                  setMyMessage((prev) => ({ ...prev, message: "" }));
-                }}
-                className="flex-grow"
-              >
-                <div className="flex flex-col h-full">
-                  <input
-                    value={myMessage.message}
-                    onChange={(e) =>
-                      setMyMessage((prev) => ({
-                        ...prev,
-                        message: e.target.value,
-                      }))
-                    }
-                    type="text"
-                    placeholder="Type your message..."
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                  <button
-                    type="submit"
-                    className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                  >
-                    Send
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+  <div className="border-t border-gray-300 mt-4">
+    {/* Chat input field */}
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        socket.emit("sendmessage", myMessage);
+        setMyMessage((prev) => ({ ...prev, message: "" }));
+      }}
+      className="flex"
+    >
+      <input
+        value={myMessage.message}
+        onChange={(e) =>
+          setMyMessage((prev) => ({
+            ...prev,
+            message: e.target.value,
+          }))
+        }
+        type="text"
+        placeholder="Type your message..."
+        className="flex-grow p-2 border border-gray-300 rounded"
+      />
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      >
+        Send
+      </button>
+    </form>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
